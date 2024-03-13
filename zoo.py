@@ -31,7 +31,7 @@ class Zoo(tk.Tk):
         # We first do the standard initialization of a tk.Tk object
         tk.Tk.__init__(self)
         # Then we define the additional attributes that we want to add to the Zoo class
-        self.animals = '🐜🦋🐪🐬🐘🐠🐐🐹🍧🎃🐨🐞🐭📔🐙🐧🐮🦏🐍🐯🐢🦀🐋🐌🐝🦉'
+        self.animals = '🐜🦋🐪🐬🐘🐸🐐🐹🍧🎃🐨🐞🐭📔🐙🐧🐮🦏🐍🐯🐢🦀🐋🐌🐝🦉'
         self.font = ImageFont.truetype("seguiemj.ttf", size=int(24))
         self.size = 32        # size of marker images in pixels
         self.max_age = 8000   # number of time steps before markers disappear
