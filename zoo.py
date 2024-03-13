@@ -33,9 +33,10 @@ class Zoo(tk.Tk):
         # Then we define the additional attributes that we want to add to the Zoo class
         self.animals = '🐜🦋🐪🐬🐘🐸🐐🐹🍧🎃🐨🐞🐭📔🐙🐧🐮🦏🐍🐯🐢🦀🐋🐌🐝🦉'
         self.font = ImageFont.truetype("seguiemj.ttf", size=int(24))
-        self.size = 32        # size of marker images in pixels
-        self.max_age = 8000   # number of time steps before markers disappear
-        self.markers = []     # list of Marker objects
+        self.size = 32         # size of marker images in pixels
+        self.max_age = 8000    # number of time steps before markers disappear
+        self.markers = []      # list of Marker objects
+        self.is_frozen = False 
         self.canvas = tk.Canvas(self, width=500, height=500)
         self.canvas.pack()
 
@@ -110,6 +111,8 @@ class Zoo(tk.Tk):
             self.accelerate(1.2)
         elif c == '-':
             self.accelerate(0.8)
+        elif c == '.':
+            self.is_frozen = not self.is_frozen
         elif c == '#':
             self.clear()
         # Under unusual circumstances, such as when many keys are pressed in
@@ -149,29 +152,31 @@ class Zoo(tk.Tk):
     def update(self):
         """Update the positions of the markers and remove old markers."""
         # This method is called every 100 milliseconds.
-        for m in self.markers:
-            # Move the marker
-            m.x += m.dx # This is shorthand for m.x = m.x + m.dx
-            m.y += m.dy # This is shorthand for m.y = m.y + m.dy
-            self.canvas.coords(m.obj, m.x, m.y)
-            # If the marker reaches the edge of the canvas, make it bounce
-            if m.x < 10 or m.x > 490:
-                m.dx *= -1
-            if m.y < 10 or m.y > 490:
-                m.dy *= -1
-            # Update the age of the marker
-            m.age += 1
-            # The next few lines make the marker fade away as it gets older
-            img0 = ImageTk.getimage(m.img)
-            alpha = img0.split()[3]
-            o = 1 - np.minimum(1,np.maximum(0, m.age / self.max_age))
-            alpha = ImageEnhance.Brightness(alpha).enhance(o)
-            img0.putalpha(alpha)
-            m.img.paste(img0)
-            # If the marker is too old, remove it
-            if m.age > self.max_age:
-                self.canvas.delete(m.obj)
-                self.markers.remove(m)
+
+        if not self.is_frozen:
+            for m in self.markers:
+                # Move the marker
+                m.x += m.dx # This is shorthand for m.x = m.x + m.dx
+                m.y += m.dy # This is shorthand for m.y = m.y + m.dy
+                self.canvas.coords(m.obj, m.x, m.y)
+                # If the marker reaches the edge of the canvas, make it bounce
+                if m.x < 10 or m.x > 490:
+                    m.dx *= -1
+                if m.y < 10 or m.y > 490:
+                    m.dy *= -1
+                # Update the age of the marker
+                m.age += 1
+                # The next few lines make the marker fade away as it gets older
+                img0 = ImageTk.getimage(m.img)
+                alpha = img0.split()[3]
+                o = 1 - np.minimum(1,np.maximum(0, m.age / self.max_age))
+                alpha = ImageEnhance.Brightness(alpha).enhance(o)
+                img0.putalpha(alpha)
+                m.img.paste(img0)
+                # If the marker is too old, remove it
+                if m.age > self.max_age:
+                    self.canvas.delete(m.obj)
+                    self.markers.remove(m)
                 
         # Set a timer to call this method again after 100 milliseconds
         self.after(100, self.update)
