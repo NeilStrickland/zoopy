@@ -107,9 +107,9 @@ class Zoo(tk.Tk):
 
         c = event.char.lower()
         if c == '+':
-            self.accelerate(1.2)
+            self.accelerate(1.3)
         elif c == '-':
-            self.accelerate(0.8)
+            self.accelerate(0.7)
         elif c == '#':
             self.clear()
         # Under unusual circumstances, such as when many keys are pressed in
