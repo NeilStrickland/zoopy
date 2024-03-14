@@ -37,7 +37,7 @@ class Zoo(tk.Tk):
         self.max_age = 8000    # number of time steps before markers disappear
         self.markers = []      # list of Marker objects
         self.is_frozen = False 
-        self.canvas = tk.Canvas(self, width=500, height=500)
+        self.canvas = tk.Canvas(self, width=600, height=600)
         self.canvas.pack()
 
         # The next line means that when the left mouse button is clicked, 
